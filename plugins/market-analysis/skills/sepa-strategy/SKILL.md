@@ -26,7 +26,7 @@ Analyze stocks using Mark Minervini's SEPA (Specific Entry Point Analysis) frame
 
 ## Step 1: Gather Stock Data
 
-Collect the following data for the stock. For A-share and Hong Kong stocks, use `ah-market-data` first so prices, volume, fundamentals, announcements, and sector context come from Hexin iFinD MCP. For US/global stocks, use yfinance, funda-data, or any available market data tool.
+Collect the following data for the stock. For A-share and Hong Kong stocks, use `ah-market-data` first so prices, volume, fundamentals, announcements, and sector context come from the Hexin iFinD HTTP API. For US/global stocks, use yfinance, funda-data, or any available market data tool.
 
 | Data needed | Purpose |
 |---|---|

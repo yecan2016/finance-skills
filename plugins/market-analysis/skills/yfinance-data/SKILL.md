@@ -3,7 +3,7 @@ name: yfinance-data
 description: >
   Fetch financial and market data using the yfinance Python library for US/global
   Yahoo Finance-supported securities, and route A-share/Hong Kong market requests
-  to the ah-market-data skill backed by Hexin iFinD MCP.
+  to the ah-market-data skill backed by the Hexin iFinD HTTP API.
   Use this skill whenever the user asks for stock prices, historical data, financial statements,
   options chains, dividends, earnings, analyst recommendations, or any market data.
   Triggers include: any mention of stock price, ticker symbol (AAPL, MSFT, TSLA, etc.),
@@ -18,7 +18,7 @@ description: >
 
 # Market Data Routing Skill
 
-Fetches financial and market data. For A-share and Hong Kong securities, use `ah-market-data` via Hexin iFinD MCP first. For US/global Yahoo Finance-supported securities, use [yfinance](https://github.com/ranaroussi/yfinance).
+Fetches financial and market data. For A-share and Hong Kong securities, use `ah-market-data` via the Hexin iFinD HTTP API first. For US/global Yahoo Finance-supported securities, use [yfinance](https://github.com/ranaroussi/yfinance).
 
 **Important**: yfinance is not affiliated with Yahoo, Inc. Data is for research and educational purposes.
 
@@ -35,7 +35,7 @@ Use `ah-market-data` when the request includes:
 - A股, 港股, H股, 沪深300, 恒生指数, 北向资金, 南向资金
 - Chinese funds, ETFs, macro series, announcements, or Chinese market news
 
-For A/H requests, call `ah-market-data` and ask it for the needed normalized fields. Do not install yfinance unless the A/H MCP data is unavailable and the user explicitly accepts a fallback with likely coverage gaps.
+For A/H requests, call `ah-market-data` and ask it for the needed normalized fields. Do not install yfinance unless the A/H iFinD data is unavailable and the user explicitly accepts a fallback with likely coverage gaps.
 
 For all other tickers and Yahoo Finance-supported symbols, continue to Step 2.
 
@@ -131,7 +131,7 @@ After fetching data, present it clearly:
 
 If the user seems to want a chart or visualization, combine with an appropriate visualization approach (e.g., generate an HTML chart or describe the trend).
 
-Always state the data source: Hexin iFinD MCP for A/H data, or Yahoo Finance/yfinance for Yahoo-sourced data.
+Always state the data source: Hexin iFinD HTTP API for A/H data, or Yahoo Finance/yfinance for Yahoo-sourced data.
 
 ---
 

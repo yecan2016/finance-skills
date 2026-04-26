@@ -42,7 +42,7 @@ npx skills add himself65/finance-skills -a <agent-name>
 
 ### Market Analysis (`finance-market-analysis`)
 
-Stock analysis, earnings, estimates, correlations, liquidity, ETFs, options payoff, and trading strategies via yfinance plus A/H routing through Hexin iFinD MCP.
+Stock analysis, earnings, estimates, correlations, liquidity, ETFs, options payoff, and trading strategies via yfinance plus A/H routing through the Hexin iFinD HTTP API.
 
 | Skill | Description |
 |---|---|
@@ -71,13 +71,13 @@ Read-only social media and research feeds — Twitter/X, Discord, LinkedIn, Tele
 
 ### Data Providers (`finance-data-providers`)
 
-Includes A/H market data via Hexin iFinD MCP in addition to the existing external API providers.
+Includes A/H market data via the Hexin iFinD HTTP API in addition to the existing external API providers.
 
 External API data — sentiment via Adanos, comprehensive data via Funda AI, and Hormuz Strait monitoring.
 
 | Skill | Description |
 |---|---|
-| [ah-market-data](plugins/data-providers/skills/ah-market-data/) | A/H stock, fund, macro, and news data via Hexin iFinD MCP servers |
+| [ah-market-data](plugins/data-providers/skills/ah-market-data/) | A/H stock, fund, macro, and news data via the Hexin iFinD HTTP API |
 | [finance-sentiment](plugins/data-providers/skills/finance-sentiment/) | Stock sentiment research via Adanos Finance API — Reddit, X.com, news, Polymarket |
 | [funda-data](plugins/data-providers/skills/funda-data/) | [Funda AI](https://funda.ai) API — real-time quotes, fundamentals, options flow, sentiment, SEC filings, and 60+ endpoints |
 | [hormuz-strait](plugins/data-providers/skills/hormuz-strait/) | Strait of Hormuz monitoring — shipping, oil impact, insurance risk, crisis timeline |

@@ -1,7 +1,7 @@
 ---
 name: earnings-preview
 description: >
-  Generate a pre-earnings briefing for any stock. Use ah-market-data via Hexin iFinD MCP
+  Generate a pre-earnings briefing for any stock. Use ah-market-data via the Hexin iFinD HTTP API
   for A-share and Hong Kong securities, and Yahoo Finance/yfinance for US/global securities.
   Use this skill whenever the user wants to prepare for an upcoming earnings report,
   understand what analysts expect, review a company's beat/miss track record,
@@ -21,7 +21,7 @@ description: >
 
 # Earnings Preview Skill
 
-Generates a pre-earnings briefing. For A-share and Hong Kong securities, use `ah-market-data` via Hexin iFinD MCP. For US/global securities, use Yahoo Finance data via [yfinance](https://github.com/ranaroussi/yfinance). Pulls together upcoming earnings date, consensus estimates, historical accuracy, analyst sentiment, and key financial context.
+Generates a pre-earnings briefing. For A-share and Hong Kong securities, use `ah-market-data` via the Hexin iFinD HTTP API. For US/global securities, use Yahoo Finance data via [yfinance](https://github.com/ranaroussi/yfinance). Pulls together upcoming earnings date, consensus estimates, historical accuracy, analyst sentiment, and key financial context.
 
 **Important**: Data is for research and educational purposes only. Not financial advice. yfinance is not affiliated with Yahoo, Inc.
 
@@ -31,7 +31,7 @@ Generates a pre-earnings briefing. For A-share and Hong Kong securities, use `ah
 
 If the target is an A-share or Hong Kong company, use `ah-market-data` before yfinance. Ask for earnings calendar, forecast/consensus data if available, recent financial statements, announcements, latest news, quote snapshot, and price history around prior report dates.
 
-For A/H companies, replace US-style "Street expectations" wording with "consensus/forecast data returned by iFinD MCP" and clearly flag missing analyst estimate coverage.
+For A/H companies, replace US-style "Street expectations" wording with "consensus/forecast data returned by iFinD" and clearly flag missing analyst estimate coverage.
 
 For non-A/H requests, continue to Step 2.
 

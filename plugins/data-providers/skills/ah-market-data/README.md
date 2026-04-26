@@ -1,10 +1,12 @@
 # ah-market-data
 
-A/H market data provider skill using Hexin iFinD MCP servers.
+A/H market data provider skill using the Hexin iFinD HTTP JSON-RPC API directly,
+without requiring agent-side MCP tool registration.
 
 ## What it does
 
-Fetches read-only Chinese mainland and Hong Kong market data through configured MCP servers:
+Fetches read-only Chinese mainland and Hong Kong market data through iFinD's
+hosted HTTP data endpoints:
 
 - **Stocks** - A-share and Hong Kong quotes, historical prices, financials, valuation, announcements, sectors, indices
 - **Funds** - Chinese funds and ETFs, NAV, premium/discount, holdings, performance
@@ -20,20 +22,43 @@ Fetches read-only Chinese mainland and Hong Kong market data through configured 
 
 ## Platform
 
-Works on agents that support MCP tools and have the Hexin iFinD MCP servers configured.
+Works on CLI-based agents with Python and network access to iFinD's HTTP API.
+It does not require the agent runtime to expose MCP tools.
 
 ## Setup
 
-Configure these MCP servers in the agent runtime:
+Provide an iFinD authorization token using one of:
 
-- `hexin-ifind-ds-stock-mcp`
-- `hexin-ifind-ds-fund-mcp`
-- `hexin-ifind-ds-edb-mcp`
-- `hexin-ifind-ds-news-mcp`
+```bash
+export IFIND_AUTH_TOKEN="your-token"
+```
 
-Keep authorization headers in the agent MCP configuration or secret store. Do not commit tokens to this repository.
+or a JSON config file:
+
+```json
+{ "auth_token": "your-token" }
+```
+
+The direct client also auto-detects `mcp_config.json` in the current directory
+or any parent directory, so placing it at the repository root works. Set
+`IFIND_MCP_CONFIG_PATH` if the config file lives somewhere else.
+
+Do not commit tokens to this repository.
+
+## Direct client
+
+```bash
+python scripts/ifind_http_client.py list stock
+python scripts/ifind_http_client.py --text call stock get_stock_summary --query "贵州茅台 财务状况"
+python scripts/ifind_http_client.py --text call news search_notice --query "贵州茅台 2026年第一季度报告" --time-start 2026-04-01 --time-end 2026-04-26 --size 5
+```
+
+The client prefers `requests` with environment proxies disabled, falls back to
+Python's built-in `urllib`, and retries transient EOF/timeout/5xx failures.
+For structured tools, use `--arg key=value` or the news shortcuts instead of
+hand-writing shell JSON.
 
 ## Reference files
 
-- `references/mcp-routing.md` - server routing and task mapping
+- `references/http-api.md` - direct HTTP endpoints, JSON-RPC flow, tool catalog, and examples
 - `references/response-guidelines.md` - output conventions, units, and safety language

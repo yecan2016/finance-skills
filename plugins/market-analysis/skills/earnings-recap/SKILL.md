@@ -1,7 +1,7 @@
 ---
 name: earnings-recap
 description: >
-  Generate a post-earnings analysis for any stock. Use ah-market-data via Hexin iFinD MCP
+  Generate a post-earnings analysis for any stock. Use ah-market-data via the Hexin iFinD HTTP API
   for A-share and Hong Kong securities, and Yahoo Finance/yfinance for US/global securities.
   Use when the user wants to review what happened after earnings,
   understand beat/miss results, see stock reaction, or get an earnings recap.
@@ -17,7 +17,7 @@ description: >
 
 # Earnings Recap Skill
 
-Generates a post-earnings analysis. For A-share and Hong Kong securities, use `ah-market-data` via Hexin iFinD MCP. For US/global securities, use Yahoo Finance data via [yfinance](https://github.com/ranaroussi/yfinance). Covers the actual vs estimated numbers, surprise magnitude, stock price reaction, and financial context.
+Generates a post-earnings analysis. For A-share and Hong Kong securities, use `ah-market-data` via the Hexin iFinD HTTP API. For US/global securities, use Yahoo Finance data via [yfinance](https://github.com/ranaroussi/yfinance). Covers the actual vs estimated numbers, surprise magnitude, stock price reaction, and financial context.
 
 **Important**: Data is for research and educational purposes only. Not financial advice. yfinance is not affiliated with Yahoo, Inc.
 

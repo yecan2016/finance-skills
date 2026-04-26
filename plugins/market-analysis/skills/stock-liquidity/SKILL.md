@@ -2,7 +2,7 @@
 name: stock-liquidity
 description: >
   Analyze stock liquidity using bid-ask spreads, volume profiles, order book depth,
-  market impact estimates, and turnover ratios. Use ah-market-data via Hexin iFinD MCP
+  market impact estimates, and turnover ratios. Use ah-market-data via the Hexin iFinD HTTP API
   for A-share and Hong Kong securities, and yfinance for Yahoo Finance-supported US/global securities.
   Use this skill whenever the user asks about liquidity, trading costs, bid-ask spread,
   market depth, volume analysis, slippage, market impact, turnover ratio, or how
@@ -44,7 +44,7 @@ Then compute the same liquidity concepts using normalized fields:
 - Amihud illiquidity = average absolute return / turnover amount
 - market impact = square-root model using local currency turnover and volatility
 
-For A/H output, state whether bid/ask, order book, or float data was unavailable from MCP and avoid yfinance-specific delay caveats.
+For A/H output, state whether bid/ask, order book, or float data was unavailable from iFinD and avoid yfinance-specific delay caveats.
 
 For non-A/H requests, continue to Step 2.
 
@@ -497,7 +497,7 @@ After running the appropriate sub-skill:
 - The **lookback period** used for historical metrics
 - The **data timestamp** — spreads and quotes are snapshots, not real-time
 - Any tickers that returned **empty data** (invalid symbol, delisted, etc.)
-- The **data source**: Hexin iFinD MCP for A/H securities, or Yahoo Finance/yfinance for Yahoo-sourced securities
+- The **data source**: Hexin iFinD HTTP API for A/H securities, or Yahoo Finance/yfinance for Yahoo-sourced securities
 
 ### Always caveat
 

@@ -1,4 +1,4 @@
 interface:
   display_name: "A/H Market Data"
-  short_description: "Use iFinD MCP servers for A-share and Hong Kong market data."
+  short_description: "Use the iFinD HTTP API for A-share and Hong Kong market data."
   default_prompt: "Use A/H market data to fetch quote, fundamentals, fund, macro, and news data for a Chinese or Hong Kong security."

@@ -11,7 +11,7 @@
     {
       "name": "finance-market-analysis",
       "source": "./plugins/market-analysis",
-      "description": "Stock analysis, earnings, estimates, correlations, liquidity, ETFs, options payoff, and trading strategies via yfinance plus A/H routing through Hexin iFinD MCP.",
+      "description": "Stock analysis, earnings, estimates, correlations, liquidity, ETFs, options payoff, and trading strategies via yfinance plus A/H routing through the Hexin iFinD HTTP API.",
       "version": "5.2.0"
     },
     {
@@ -23,7 +23,7 @@
     {
       "name": "finance-data-providers",
       "source": "./plugins/data-providers",
-      "description": "External API and MCP data: A/H market data via Hexin iFinD MCP, sentiment via Adanos, comprehensive data via Funda AI, and Hormuz Strait monitoring.",
+      "description": "External API data: A/H market data via the Hexin iFinD HTTP API, sentiment via Adanos, comprehensive data via Funda AI, and Hormuz Strait monitoring.",
       "version": "5.2.0"
     },
     {

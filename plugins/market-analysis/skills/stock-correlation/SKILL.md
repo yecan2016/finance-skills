@@ -19,7 +19,7 @@ description: >
 
 # Stock Correlation Analysis Skill
 
-Finds and analyzes correlated stocks. For A-share and Hong Kong securities, use `ah-market-data` via Hexin iFinD MCP for peer discovery and historical prices. For US/global securities, use historical price data from Yahoo Finance via [yfinance](https://github.com/ranaroussi/yfinance). Routes to specialized sub-skills based on user intent.
+Finds and analyzes correlated stocks. For A-share and Hong Kong securities, use `ah-market-data` via the Hexin iFinD HTTP API for peer discovery and historical prices. For US/global securities, use historical price data from Yahoo Finance via [yfinance](https://github.com/ranaroussi/yfinance). Routes to specialized sub-skills based on user intent.
 
 **Important**: This is for research and educational purposes only. Not financial advice. yfinance is not affiliated with Yahoo, Inc.
 
@@ -30,8 +30,8 @@ Finds and analyzes correlated stocks. For A-share and Hong Kong securities, use 
 If any target ticker is an A-share or Hong Kong security, use `ah-market-data` before yfinance.
 
 For A/H correlation requests:
-- use stock MCP to normalize symbols and fetch historical close prices
-- use stock MCP sector, industry, concept-board, or index constituents to build peer universes
+- use iFinD stock tools to normalize symbols and fetch historical close prices
+- use iFinD stock tools for sector, industry, concept-board, or index constituents to build peer universes
 - prefer the local benchmark and same-market peers before cross-market peers
 - align trading calendars and drop non-overlapping dates before computing returns
 - state currency and market differences when comparing A-share, Hong Kong, and US-listed securities

@@ -2,41 +2,50 @@
 name: ah-market-data
 description: >
   Fetch A-share and Hong Kong stock, fund, macroeconomic, and market news data
-  through Hexin iFinD MCP servers. Use this skill whenever the user asks about
-  A/H stocks, Chinese mainland equities, Hong Kong equities, A-share tickers
-  such as 600519.SH or 000001.SZ, Hong Kong tickers such as 00700.HK,
-  Chinese funds or ETFs, CSI/HSI indices, sector or concept market data,
-  Chinese macro indicators, company announcements, financial statements,
-  valuation metrics, price/volume history, northbound or southbound related
-  market research, or Chinese financial news. This skill is read-only and must
-  never place trades, submit orders, or modify brokerage/account state.
+  through the Hexin iFinD HTTP JSON-RPC API, without relying on agent-side MCP
+  tool registration. Use this skill whenever the user asks about A/H stocks,
+  Chinese mainland equities, Hong Kong equities, A-share tickers such as
+  600519.SH or 000001.SZ, Hong Kong tickers such as 00700.HK, Chinese funds or
+  ETFs, CSI/HSI indices, sector or concept market data, Chinese macro
+  indicators, company announcements, financial statements, valuation metrics,
+  price/volume history, northbound or southbound related market research, or
+  Chinese financial news. This skill is read-only and must never place trades,
+  submit orders, or modify brokerage/account state.
 ---
 
 # A/H Market Data
 
-Use the Hexin iFinD MCP data-source servers as the preferred provider for A-share and Hong Kong market research.
+Use Hexin iFinD's hosted HTTP JSON-RPC data endpoints as the preferred provider
+for A-share and Hong Kong market research. This skill bypasses the agent's MCP
+tool layer and calls the iFinD endpoints directly through `scripts/ifind_http_client.py`.
 
-This skill is a provider layer: it fetches and normalizes Chinese/HK market data for downstream analysis skills such as SEPA, liquidity, earnings, estimate, ETF/fund, macro, and news workflows.
+The remote iFinD service still uses MCP-over-HTTP JSON-RPC internally
+(`initialize`, `tools/list`, `tools/call`). Treat it as a direct API client flow:
+resolve an authorization token, initialize a session, then call the needed tool.
 
-## Step 1: Check MCP Availability
+## Step 1: Detect Direct API Credentials
 
-Use the configured MCP servers instead of hardcoded API tokens or raw HTTP calls. Never print, persist, or commit authorization headers.
+Resolve the iFinD authorization token without printing it. The direct client checks:
 
-Expected server names:
+1. `IFIND_AUTH_TOKEN`
+2. `IFIND_API_TOKEN`
+3. `IFIND_MCP_CONFIG_PATH` pointing to JSON with `auth_token`
+4. `mcp_config.json` in the current working directory or any parent directory, including the repository root
 
-| Server | Primary use |
-|---|---|
-| `hexin-ifind-ds-stock-mcp` | A/H stock quotes, OHLCV, fundamentals, announcements, valuation, sectors, indices |
-| `hexin-ifind-ds-fund-mcp` | Funds, ETFs, holdings, NAV, performance, fund managers |
-| `hexin-ifind-ds-edb-mcp` | Economic database, macro indicators, rates, inflation, activity data |
-| `hexin-ifind-ds-news-mcp` | Chinese market news, company news, policy headlines, event context |
+```
+!`python -c "import os,pathlib; cwd=pathlib.Path.cwd(); paths=[pathlib.Path(os.environ['IFIND_MCP_CONFIG_PATH'])] if os.environ.get('IFIND_MCP_CONFIG_PATH') else [cwd/'mcp_config.json', *[p/'mcp_config.json' for p in cwd.parents]]; found=next((str(p) for p in paths if p.exists()), ''); print('IFIND_AUTH_TOKEN_SET' if (os.environ.get('IFIND_AUTH_TOKEN') or os.environ.get('IFIND_API_TOKEN')) else ('IFIND_CONFIG_FOUND:'+found if found else 'IFIND_AUTH_MISSING'))" 2>/dev/null || echo "PYTHON_UNAVAILABLE"`
+```
 
-If these MCP servers or their tools are unavailable:
-1. Tell the user the iFinD MCP connection is not available in the current runtime.
-2. Ask them to configure the MCP servers in their agent settings.
-3. If the task is urgent, continue only with user-provided data or another explicitly available data source.
+Decision tree:
 
-Read `references/mcp-routing.md` when you need to choose the right MCP server/tool for a request.
+1. If a token or config file is found, proceed with direct HTTP calls.
+2. If Python is unavailable, use the JSON-RPC request shapes in `references/http-api.md`
+   with any available HTTP client.
+3. If credentials are missing, ask the user to set `IFIND_AUTH_TOKEN` or provide an
+   `mcp_config.json` path. Do not ask them to configure agent MCP servers.
+
+Read `references/http-api.md` before making calls; it contains endpoint URLs,
+the JSON-RPC session flow, and the tool catalog discovered from `tools/list`.
 
 ## Step 2: Identify Security And Market
 
@@ -47,54 +56,75 @@ Normalize the user's input before calling tools.
 | `600519`, `600519.SH`, `贵州茅台` | A-share stock | Prefer exchange-qualified code in output |
 | `000001`, `000001.SZ`, `平安银行` | A-share stock | Disambiguate stock vs index/fund when needed |
 | `00700`, `0700.HK`, `腾讯控股` | Hong Kong stock | Normalize to `.HK` style when possible |
-| `沪深300`, `CSI 300`, `000300.SH` | China index | Use index-capable stock/market tool |
-| `恒生指数`, `HSI` | Hong Kong index | Use index-capable stock/market tool |
-| Fund code / ETF code | Fund or ETF | Route to fund MCP first |
-| Macro indicator | Economic data | Route to EDB MCP |
-| News / policy / announcement | News data | Route to news MCP, then stock MCP if company-specific |
+| `沪深300`, `CSI 300`, `000300.SH` | China index | Use stock/index-capable queries |
+| `恒生指数`, `HSI` | Hong Kong index | Use stock/index-capable queries |
+| Fund code / ETF code | Fund or ETF | Route to fund server first |
+| Macro indicator | Economic data | Route to EDB server |
+| News / policy / announcement | News data | Route to news server, then stock server if company-specific |
 
-Ask a concise clarification only when the same code/name maps to multiple plausible instruments and the requested metric depends on the distinction.
+Ask a concise clarification only when the same code/name maps to multiple plausible
+instruments and the requested metric depends on the distinction.
 
 ## Step 3: Route The Request
 
-Match the user request to the lightest data call that answers it.
+Match the user request to the lightest direct API call that answers it.
 
-| Request type | Preferred MCP | Typical fields to fetch |
+| Request type | Server/tool | Typical fields to request |
 |---|---|---|
-| Current quote / quote snapshot | stock | last price, change %, volume, turnover, market cap, timestamp |
-| Historical K-line / price trend | stock | open, high, low, close, volume, turnover, adjustment mode |
-| Financial statements | stock | income statement, balance sheet, cash flow, reporting period |
-| Valuation and factors | stock | PE, PB, PS, dividend yield, ROE, margins, growth |
-| Announcements / filings | stock or news | announcement title, date, category, URL/content summary |
-| Sector / concept / peers | stock | industry, concept boards, constituent list, peer metrics |
-| Fund or ETF data | fund | NAV, premium/discount, holdings, performance, manager, fees |
-| Macro data | edb | indicator value, frequency, region, release date, history |
-| Market news | news | headline, source, publish time, tickers/entities, summary |
+| Current quote / quote snapshot | `stock/get_stock_summary` or `stock/get_stock_performance` | last price, change %, volume, turnover, market cap, timestamp |
+| Historical K-line / price trend | `stock/get_stock_performance` | open, high, low, close, volume, turnover, adjustment mode |
+| Company profile / listing info | `stock/get_stock_info` | code, name, exchange, industry, listing date, main business |
+| Financial statements | `stock/get_stock_financials` | income statement, balance sheet, cash flow, reporting period |
+| Valuation and factors | `stock/get_stock_financials` | PE, PB, PS, dividend yield, ROE, margins, growth |
+| Shareholders / float | `stock/get_stock_shareholders` | float, top holders, institution holdings, shareholder count |
+| Events / corporate actions | `stock/get_stock_events` | event title, date, category, key values |
+| Announcements / filings | `news/search_notice` | announcement title, date, category, relevant snippets |
+| Sector / concept / peers | `stock/search_stocks` or `stock/get_stock_info` | industry, concept boards, constituent or peer list |
+| Fund or ETF data | fund tools | NAV, premium/discount, holdings, performance, manager, fees |
+| Macro data | `edb/search_edb`, then `edb/get_edb_data` | indicator value, frequency, region, release date, history |
+| Market news | `news/search_news` or `news/search_trending_news` | headline/snippet, source, publish time, topic/entity |
 
 For broad questions like "分析一下贵州茅台":
-1. Fetch quote and recent price history.
+
+1. Fetch company/profile and quote or recent price context.
 2. Fetch valuation and key financial metrics.
 3. Fetch latest announcements/news.
 4. Add sector/peer context when available.
 
-For cross-market comparisons like "A股和港股的腾讯相关标的":
+For cross-market comparisons:
+
 1. Normalize each listed security.
 2. Fetch the same metric set for each instrument.
-3. State currency, exchange, timestamp, and data-source differences.
+3. State currency, exchange, timestamp, and provider limitations.
 
-## Step 4: Execute Through MCP Tools
+## Step 4: Execute Through The Direct HTTP Client
 
-Use the actual tool names exposed by the MCP server in the current runtime. Tool names may differ by client, so discover them from the MCP tool list/resource metadata instead of inventing function names.
+Use the bundled client from the skill directory:
+
+```bash
+python scripts/ifind_http_client.py list stock
+python scripts/ifind_http_client.py --text call stock get_stock_summary --query "贵州茅台 财务状况"
+python scripts/ifind_http_client.py --text call stock get_stock_financials --query "贵州茅台 2025-12-31 ROE 净利润率"
+python scripts/ifind_http_client.py --text call news search_notice --query "贵州茅台 2025年度报告 经营情况" --time-start 2026-01-01 --time-end 2026-04-26 --size 5
+```
 
 When calling tools:
-- prefer structured parameters over free-text prompts if the MCP server exposes schemas
+
+- use structured arguments where the tool exposes them (`search_notice`, `search_news`,
+  `search_trending_news`). Prefer CLI shortcuts such as `--time-start`, `--time-end`,
+  `--size`, `--keyword`, and repeated `--arg key=value` over hand-written shell JSON.
+- otherwise use a clear `query` string with entity, metric, and date/range
 - include exchange-qualified tickers when known
 - request only the fields and date range needed
 - keep calls read-only
 - do not store credentials in files or responses
 - preserve source timestamps and reporting periods
+- the client prefers `requests` with environment proxies disabled, falls back to
+  `urllib`, and retries transient EOF/timeout/5xx errors; set `IFIND_MAX_RETRIES`
+  or pass `--max-retries` to tune retry count
 
-If a tool returns Chinese field names, keep the raw meaning but translate only what helps the user's requested output. Do not lose the original period, unit, currency, or exchange.
+If a call fails, report whether the failure was missing credentials, network/API
+connectivity, a JSON-RPC error, or no provider data returned.
 
 ## Step 5: Normalize Output
 
@@ -116,27 +146,31 @@ Use these normalized field concepts when passing data into other analysis:
 | Data source | `source` |
 
 For A/H data, always make units explicit:
+
 - CNY vs HKD vs USD
 - shares vs lots vs contracts
 - percent vs decimal
 - reporting period vs trading date
 - adjusted vs unadjusted prices
 
-Read `references/response-guidelines.md` for answer patterns, fallback wording, and downstream-analysis handoff.
+Read `references/response-guidelines.md` for answer patterns, fallback wording,
+and downstream-analysis handoff.
 
 ## Step 6: Respond To The User
 
 Lead with the answer, then show the data table or evidence behind it.
 
 Always include:
-- the data source: Hexin iFinD MCP
+
+- the data source: Hexin iFinD HTTP API
 - the market/exchange
 - the data timestamp or reporting period
 - any missing fields or provider limitations
 
-Never present the result as investment advice. Do not place trades, recommend order execution, or imply brokerage action.
+Never present the result as investment advice. Do not place trades, recommend order
+execution, or imply brokerage action.
 
 ## Reference Files
 
-- `references/mcp-routing.md` - MCP server routing, common tasks, and fallback rules
+- `references/http-api.md` - direct HTTP endpoints, JSON-RPC flow, tool catalog, and examples
 - `references/response-guidelines.md` - A/H market output conventions and safety language

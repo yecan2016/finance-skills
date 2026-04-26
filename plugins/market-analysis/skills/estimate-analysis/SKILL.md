@@ -2,7 +2,7 @@
 name: estimate-analysis
 description: >
   Deep-dive into analyst estimates and revision trends for any stock. Use ah-market-data
-  via Hexin iFinD MCP for A-share and Hong Kong securities, and Yahoo Finance/yfinance
+  via the Hexin iFinD HTTP API for A-share and Hong Kong securities, and Yahoo Finance/yfinance
   for US/global securities.
   Use when the user wants to understand analyst estimate direction,
   how EPS or revenue forecasts changed over time, compare estimate distributions,
@@ -21,7 +21,7 @@ description: >
 
 # Estimate Analysis Skill
 
-Deep-dives into analyst estimates and revision trends. For A-share and Hong Kong securities, use `ah-market-data` via Hexin iFinD MCP. For US/global securities, use Yahoo Finance data via [yfinance](https://github.com/ranaroussi/yfinance). Covers EPS and revenue estimate distributions, revision momentum, growth projections, and multi-period comparisons.
+Deep-dives into analyst estimates and revision trends. For A-share and Hong Kong securities, use `ah-market-data` via the Hexin iFinD HTTP API. For US/global securities, use Yahoo Finance data via [yfinance](https://github.com/ranaroussi/yfinance). Covers EPS and revenue estimate distributions, revision momentum, growth projections, and multi-period comparisons.
 
 **Important**: Data is for research and educational purposes only. Not financial advice. yfinance is not affiliated with Yahoo, Inc.
 
@@ -31,7 +31,7 @@ Deep-dives into analyst estimates and revision trends. For A-share and Hong Kong
 
 If the target is an A-share or Hong Kong company, use `ah-market-data` before yfinance. Ask for analyst consensus, estimate revisions, forecast EPS/revenue/profit, price targets, ratings, historical forecast accuracy, and recent actual financials if available.
 
-If iFinD MCP does not expose a specific revision metric, state the gap and use available forecast snapshots, rating changes, or broker research metadata instead.
+If iFinD does not expose a specific revision metric, state the gap and use available forecast snapshots, rating changes, or broker research metadata instead.
 
 For non-A/H requests, continue to Step 2.
 

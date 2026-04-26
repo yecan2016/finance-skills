@@ -85,7 +85,7 @@ export const skills: Skill[] = [
     name: "yfinance-data",
     title: "Market Data Router",
     description:
-      "Route A/H market data to Hexin iFinD MCP via ah-market-data, and US/global securities to Yahoo Finance via yfinance.",
+      "Route A/H market data to the Hexin iFinD HTTP API via ah-market-data, and US/global securities to Yahoo Finance via yfinance.",
     category: "data",
     plugin: "market-analysis",
     tags: ["Market Data", "Fundamentals"],
@@ -104,10 +104,10 @@ export const skills: Skill[] = [
     name: "ah-market-data",
     title: "A/H Market Data",
     description:
-      "A-share and Hong Kong stock, fund, macro, and news data through Hexin iFinD MCP servers.",
+      "A-share and Hong Kong stock, fund, macro, and news data through the Hexin iFinD HTTP API.",
     category: "data",
     plugin: "data-providers",
-    tags: ["A/H", "MCP", "iFinD"],
+    tags: ["A/H", "API", "iFinD"],
     badge: "new",
   },
   {

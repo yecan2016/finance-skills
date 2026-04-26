@@ -3,5 +3,9 @@
 *.swo
 *~
 node_modules/
+dist/
+__pycache__/
+*.py[cod]
 .env
 .env.*
+mcp_config.json

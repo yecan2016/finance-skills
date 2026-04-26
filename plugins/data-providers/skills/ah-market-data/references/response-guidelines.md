@@ -4,7 +4,7 @@
 
 Always state:
 
-- Source: Hexin iFinD MCP
+- Source: Hexin iFinD HTTP API
 - Security name and exchange-qualified code
 - Market: A-share, Hong Kong, fund, index, or macro series
 - Currency and units

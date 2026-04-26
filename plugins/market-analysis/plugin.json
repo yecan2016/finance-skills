@@ -1,6 +1,6 @@
 {
   "name": "finance-market-analysis",
-  "description": "Stock analysis, earnings, estimates, correlations, liquidity, ETFs, options payoff, and trading strategies via yfinance plus A/H routing through Hexin iFinD MCP.",
+  "description": "Stock analysis, earnings, estimates, correlations, liquidity, ETFs, options payoff, and trading strategies via yfinance plus A/H routing through the Hexin iFinD HTTP API.",
   "version": "5.2.0",
   "author": {
     "name": "himself65"
@@ -13,7 +13,7 @@
     "stocks",
     "yfinance",
     "ifind",
-    "mcp",
+    "ifind-api",
     "a-share",
     "hong-kong",
     "earnings",

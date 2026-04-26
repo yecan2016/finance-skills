@@ -2,7 +2,7 @@
 name: etf-premium
 description: >
   Calculate ETF premium or discount relative to Net Asset Value (NAV). Use ah-market-data
-  via Hexin iFinD MCP for Chinese mainland and Hong Kong funds/ETFs, and Yahoo Finance/yfinance
+  via the Hexin iFinD HTTP API for Chinese mainland and Hong Kong funds/ETFs, and Yahoo Finance/yfinance
   for US/global ETFs.
   Use this skill whenever the user asks about an ETF's premium or discount, NAV comparison,
   whether an ETF is trading above or below its fair value, or wants to compare market price vs NAV.
@@ -17,7 +17,7 @@ description: >
 
 # ETF Premium/Discount Analysis Skill
 
-Calculates the premium or discount of an ETF's market price relative to its Net Asset Value (NAV). For Chinese mainland and Hong Kong funds/ETFs, use `ah-market-data` via Hexin iFinD MCP. For US/global ETFs, use Yahoo Finance data via [yfinance](https://github.com/ranaroussi/yfinance).
+Calculates the premium or discount of an ETF's market price relative to its Net Asset Value (NAV). For Chinese mainland and Hong Kong funds/ETFs, use `ah-market-data` via the Hexin iFinD HTTP API. For US/global ETFs, use Yahoo Finance data via [yfinance](https://github.com/ranaroussi/yfinance).
 
 **Why this matters:** An ETF's market price can diverge from the value of its underlying holdings (NAV). When you buy at a premium, you're overpaying relative to the assets; at a discount, you're getting a bargain. This divergence is typically small for liquid US equity ETFs but can be significant for bond ETFs, international ETFs, leveraged/inverse products, and crypto ETFs — especially during periods of market stress.
 
