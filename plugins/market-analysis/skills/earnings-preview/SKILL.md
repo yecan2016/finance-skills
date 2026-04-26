@@ -1,7 +1,8 @@
 ---
 name: earnings-preview
 description: >
-  Generate a pre-earnings briefing for any stock using Yahoo Finance data.
+  Generate a pre-earnings briefing for any stock. Use ah-market-data via Hexin iFinD MCP
+  for A-share and Hong Kong securities, and Yahoo Finance/yfinance for US/global securities.
   Use this skill whenever the user wants to prepare for an upcoming earnings report,
   understand what analysts expect, review a company's beat/miss track record,
   or get a quick overview before an earnings call.
@@ -20,13 +21,23 @@ description: >
 
 # Earnings Preview Skill
 
-Generates a pre-earnings briefing using Yahoo Finance data via [yfinance](https://github.com/ranaroussi/yfinance). Pulls together upcoming earnings date, consensus estimates, historical accuracy, analyst sentiment, and key financial context — everything you need before an earnings call.
+Generates a pre-earnings briefing. For A-share and Hong Kong securities, use `ah-market-data` via Hexin iFinD MCP. For US/global securities, use Yahoo Finance data via [yfinance](https://github.com/ranaroussi/yfinance). Pulls together upcoming earnings date, consensus estimates, historical accuracy, analyst sentiment, and key financial context.
 
 **Important**: Data is for research and educational purposes only. Not financial advice. yfinance is not affiliated with Yahoo, Inc.
 
 ---
 
-## Step 1: Ensure yfinance Is Available
+## Step 1: Route A/H Requests First
+
+If the target is an A-share or Hong Kong company, use `ah-market-data` before yfinance. Ask for earnings calendar, forecast/consensus data if available, recent financial statements, announcements, latest news, quote snapshot, and price history around prior report dates.
+
+For A/H companies, replace US-style "Street expectations" wording with "consensus/forecast data returned by iFinD MCP" and clearly flag missing analyst estimate coverage.
+
+For non-A/H requests, continue to Step 2.
+
+---
+
+## Step 2: Ensure yfinance Is Available
 
 **Current environment status:**
 
@@ -45,7 +56,7 @@ If already installed, skip to the next step.
 
 ---
 
-## Step 2: Identify the Ticker and Gather All Data
+## Step 3: Identify the Ticker and Gather All Data
 
 Extract the ticker symbol from the user's request. If they mention a company name without a ticker, look it up. Then fetch all relevant data in one script to minimize API calls.
 

@@ -83,9 +83,9 @@ export const skills: Skill[] = [
   },
   {
     name: "yfinance-data",
-    title: "yfinance Data",
+    title: "Market Data Router",
     description:
-      "Fetch stock prices, financials, options chains, dividends, earnings, and analyst data from Yahoo Finance via yfinance.",
+      "Route A/H market data to Hexin iFinD MCP via ah-market-data, and US/global securities to Yahoo Finance via yfinance.",
     category: "data",
     plugin: "market-analysis",
     tags: ["Market Data", "Fundamentals"],
@@ -99,6 +99,16 @@ export const skills: Skill[] = [
     plugin: "data-providers",
     tags: ["API", "Options Flow"],
     badge: "paid",
+  },
+  {
+    name: "ah-market-data",
+    title: "A/H Market Data",
+    description:
+      "A-share and Hong Kong stock, fund, macro, and news data through Hexin iFinD MCP servers.",
+    category: "data",
+    plugin: "data-providers",
+    tags: ["A/H", "MCP", "iFinD"],
+    badge: "new",
   },
   {
     name: "options-payoff",

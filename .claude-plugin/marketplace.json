@@ -4,26 +4,26 @@
     "name": "himself65"
   },
   "metadata": {
-    "description": "Agent skills for financial analysis and trading — options payoff, stock correlations, market data, social media research, and generative UI.",
+    "description": "Agent skills for financial analysis and trading - options payoff, stock correlations, market data, social media research, and generative UI.",
     "version": "5.2.0"
   },
   "plugins": [
     {
       "name": "finance-market-analysis",
       "source": "./plugins/market-analysis",
-      "description": "Stock analysis, earnings, estimates, correlations, liquidity, ETFs, options payoff, and trading strategies via yfinance.",
+      "description": "Stock analysis, earnings, estimates, correlations, liquidity, ETFs, options payoff, and trading strategies via yfinance plus A/H routing through Hexin iFinD MCP.",
       "version": "5.2.0"
     },
     {
       "name": "finance-social-readers",
       "source": "./plugins/social-readers",
-      "description": "Read-only social media and research feeds — Twitter/X, Discord, LinkedIn, Telegram, and Y Combinator.",
+      "description": "Read-only social media and research feeds - Twitter/X, Discord, LinkedIn, Telegram, and Y Combinator.",
       "version": "5.2.0"
     },
     {
       "name": "finance-data-providers",
       "source": "./plugins/data-providers",
-      "description": "External API data — sentiment via Adanos, comprehensive data via Funda AI, and Hormuz Strait monitoring.",
+      "description": "External API and MCP data: A/H market data via Hexin iFinD MCP, sentiment via Adanos, comprehensive data via Funda AI, and Hormuz Strait monitoring.",
       "version": "5.2.0"
     },
     {

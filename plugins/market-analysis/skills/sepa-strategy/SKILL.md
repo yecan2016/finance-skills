@@ -10,7 +10,8 @@ description: >
   calculate position sizing based on risk percentage, or identify consolidation patterns like
   cup-with-handle, flat base, bull flag, or high tight flag. Use this skill even when the user
   simply asks "should I buy this stock" or "is this a good setup" in the context of growth/momentum
-  trading, or when they share a stock chart and want pattern analysis.
+  trading, including A-share and Hong Kong stocks through ah-market-data, or when they share
+  a stock chart and want pattern analysis.
 ---
 
 # SEPA Strategy Analysis
@@ -25,7 +26,7 @@ Analyze stocks using Mark Minervini's SEPA (Specific Entry Point Analysis) frame
 
 ## Step 1: Gather Stock Data
 
-Collect the following data for the stock. Use yfinance, funda-data, or any available market data tool.
+Collect the following data for the stock. For A-share and Hong Kong stocks, use `ah-market-data` first so prices, volume, fundamentals, announcements, and sector context come from Hexin iFinD MCP. For US/global stocks, use yfinance, funda-data, or any available market data tool.
 
 | Data needed | Purpose |
 |---|---|
@@ -41,6 +42,12 @@ Collect the following data for the stock. Use yfinance, funda-data, or any avail
 | Institutional ownership changes (if available) | Smart money signal |
 | RS rating or 12-month relative performance vs S&P 500 | Relative strength |
 | Price history for pattern recognition | VCP / chart pattern analysis |
+
+For A/H stocks, replace S&P 500 relative strength with the most relevant local benchmark:
+- A-share large/mid caps: CSI 300, CSI 500, ChiNext, STAR 50, or the stock's iFinD industry index
+- Hong Kong stocks: Hang Seng Index, Hang Seng Tech, sector index, or H-share benchmark
+
+Always state the benchmark used.
 
 If certain data is unavailable, note it and proceed with what you have. Missing RS rating is a significant gap — flag it.
 

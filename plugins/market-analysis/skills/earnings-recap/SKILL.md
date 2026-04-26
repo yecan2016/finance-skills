@@ -1,7 +1,8 @@
 ---
 name: earnings-recap
 description: >
-  Generate a post-earnings analysis for any stock using Yahoo Finance data.
+  Generate a post-earnings analysis for any stock. Use ah-market-data via Hexin iFinD MCP
+  for A-share and Hong Kong securities, and Yahoo Finance/yfinance for US/global securities.
   Use when the user wants to review what happened after earnings,
   understand beat/miss results, see stock reaction, or get an earnings recap.
   Triggers: "AAPL earnings recap", "how did TSLA earnings go", "MSFT earnings results",
@@ -16,13 +17,23 @@ description: >
 
 # Earnings Recap Skill
 
-Generates a post-earnings analysis using Yahoo Finance data via [yfinance](https://github.com/ranaroussi/yfinance). Covers the actual vs estimated numbers, surprise magnitude, stock price reaction, and financial context — a complete picture of what happened.
+Generates a post-earnings analysis. For A-share and Hong Kong securities, use `ah-market-data` via Hexin iFinD MCP. For US/global securities, use Yahoo Finance data via [yfinance](https://github.com/ranaroussi/yfinance). Covers the actual vs estimated numbers, surprise magnitude, stock price reaction, and financial context.
 
 **Important**: Data is for research and educational purposes only. Not financial advice. yfinance is not affiliated with Yahoo, Inc.
 
 ---
 
-## Step 1: Ensure yfinance Is Available
+## Step 1: Route A/H Requests First
+
+If the target is an A-share or Hong Kong company, use `ah-market-data` before yfinance. Ask for actual reported financials, prior forecast/consensus data if available, announcement date, quote snapshot, price history around the report date, and related news/announcements.
+
+For A/H companies, call out whether the result is an official company announcement, exchange filing, media report, or provider-derived consensus comparison.
+
+For non-A/H requests, continue to Step 2.
+
+---
+
+## Step 2: Ensure yfinance Is Available
 
 **Current environment status:**
 
@@ -41,7 +52,7 @@ If already installed, skip to the next step.
 
 ---
 
-## Step 2: Identify the Ticker and Gather Data
+## Step 3: Identify the Ticker and Gather Data
 
 Extract the ticker from the user's request. Fetch all relevant post-earnings data in one script.
 

@@ -2,7 +2,8 @@
 name: stock-liquidity
 description: >
   Analyze stock liquidity using bid-ask spreads, volume profiles, order book depth,
-  market impact estimates, and turnover ratios via Yahoo Finance data.
+  market impact estimates, and turnover ratios. Use ah-market-data via Hexin iFinD MCP
+  for A-share and Hong Kong securities, and yfinance for Yahoo Finance-supported US/global securities.
   Use this skill whenever the user asks about liquidity, trading costs, bid-ask spread,
   market depth, volume analysis, slippage, market impact, turnover ratio, or how
   easy/hard it is to trade a stock without moving the price.
@@ -20,11 +21,36 @@ Analyzes stock liquidity across multiple dimensions — bid-ask spreads, volume 
 
 Liquidity matters because it determines the real cost of trading. The quoted price is not what you actually pay — spreads, slippage, and market impact all eat into returns, especially for larger positions or less liquid names.
 
+For A-share and Hong Kong securities, use `ah-market-data` first. For US/global securities, use Yahoo Finance via yfinance.
+
 **Important**: This is for research and educational purposes only. Not financial advice. yfinance is not affiliated with Yahoo, Inc.
 
 ---
 
-## Step 1: Ensure Dependencies Are Available
+## Step 1: Route A/H Requests First
+
+If the target is an A-share or Hong Kong security, call `ah-market-data` before using yfinance.
+
+Ask `ah-market-data` for:
+- quote snapshot: last price, bid/ask if available, volume, turnover, timestamp
+- historical OHLCV: at least 3 months daily data by default
+- shares outstanding and free float if available
+- market, board, sector, trading status, and any limit-up/limit-down or halt context
+
+Then compute the same liquidity concepts using normalized fields:
+- ADTV = average daily trading volume
+- average daily turnover amount = close * volume or provider turnover field
+- turnover ratio = average volume / float shares when float is available
+- Amihud illiquidity = average absolute return / turnover amount
+- market impact = square-root model using local currency turnover and volatility
+
+For A/H output, state whether bid/ask, order book, or float data was unavailable from MCP and avoid yfinance-specific delay caveats.
+
+For non-A/H requests, continue to Step 2.
+
+---
+
+## Step 2: Ensure Dependencies Are Available
 
 **Current environment status:**
 
@@ -43,7 +69,7 @@ If already installed, skip and proceed.
 
 ---
 
-## Step 2: Route to the Correct Sub-Skill
+## Step 3: Route to the Correct Sub-Skill
 
 Classify the user's request and jump to the matching section. If the user asks for a general liquidity assessment without specifying a particular metric, run **Sub-Skill A** (Liquidity Dashboard) which computes all key metrics together.
 
@@ -462,7 +488,7 @@ Show:
 
 ---
 
-## Step 3: Respond to the User
+## Step 4: Respond to the User
 
 After running the appropriate sub-skill:
 
@@ -471,6 +497,7 @@ After running the appropriate sub-skill:
 - The **lookback period** used for historical metrics
 - The **data timestamp** — spreads and quotes are snapshots, not real-time
 - Any tickers that returned **empty data** (invalid symbol, delisted, etc.)
+- The **data source**: Hexin iFinD MCP for A/H securities, or Yahoo Finance/yfinance for Yahoo-sourced securities
 
 ### Always caveat
 

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import {
   createContext,
@@ -70,36 +70,36 @@ const terminalTabs: TabContent[] = [
     command: "npx plugins add himself65/finance-skills",
     lines: [
       { text: "", delay: 200 },
-      { text: "┌   plugins", color: secondary, delay: 100 },
-      { text: "◇  Source: https://github.com/himself65/finance-skills", color: muted, delay: 300 },
-      { text: "│", color: muted, delay: 60 },
-      { text: "●  Repository cloned", color: green, delay: 400 },
-      { text: "│", color: muted, delay: 60 },
-      { text: "◇  Found 5 plugin(s)", color: muted, delay: 300 },
-      { text: "│", color: muted, delay: 60 },
-      { text: "│  finance-market-analysis  10 skills  Stock analysis, earnings, options via yfinance", color: secondary, delay: 100 },
-      { text: "│  finance-social-readers    5 skills  Twitter, Discord, LinkedIn, Telegram, YC", color: secondary, delay: 100 },
-      { text: "│  finance-data-providers    3 skills  Sentiment, Funda AI, Hormuz Strait APIs", color: secondary, delay: 100 },
-      { text: "│  finance-startup-tools     1 skill   Startup analysis", color: secondary, delay: 100 },
-      { text: "│  finance-ui-tools          1 skill   Generative UI design system", color: secondary, delay: 100 },
-      { text: "│", color: muted, delay: 60 },
-      { text: "│  Targets:  Claude Code", color: muted, delay: 80 },
-      { text: "│  Scope:    user", color: muted, delay: 80 },
-      { text: "│", color: muted, delay: 60 },
-      { text: "◆  Install? Y", color: secondary, delay: 500 },
-      { text: "◇  Preparing plugins for Claude Code...", color: muted, delay: 400 },
-      { text: "│", color: muted, delay: 60 },
-      { text: "◇  Adding marketplace", color: muted, delay: 200 },
-      { text: "●  Marketplace added", color: green, delay: 300 },
-      { text: "│", color: muted, delay: 60 },
-      { text: "◇  Installing 5 plugins (20 skills)...", color: muted, delay: 400 },
-      { text: "●  Installed finance-market-analysis", color: green, delay: 200 },
-      { text: "●  Installed finance-social-readers", color: green, delay: 200 },
-      { text: "●  Installed finance-data-providers", color: green, delay: 200 },
-      { text: "●  Installed finance-startup-tools", color: green, delay: 200 },
-      { text: "●  Installed finance-ui-tools", color: green, delay: 200 },
-      { text: "│", color: muted, delay: 60 },
-      { text: "●  Done.  Restart your agent tools to load the plugins.", color: green, delay: 200 },
+      { text: "鈹?  plugins", color: secondary, delay: 100 },
+      { text: "鈼? Source: https://github.com/himself65/finance-skills", color: muted, delay: 300 },
+      { text: "鈹?, color: muted, delay: 60 },
+      { text: "鈼? Repository cloned", color: green, delay: 400 },
+      { text: "鈹?, color: muted, delay: 60 },
+      { text: "鈼? Found 5 plugin(s)", color: muted, delay: 300 },
+      { text: "鈹?, color: muted, delay: 60 },
+      { text: "鈹? finance-market-analysis  10 skills  Analysis via yfinance + A/H MCP routing", color: secondary, delay: 100 },
+      { text: "鈹? finance-social-readers    5 skills  Twitter, Discord, LinkedIn, Telegram, YC", color: secondary, delay: 100 },
+      { text: "鈹? finance-data-providers    4 skills  A/H MCP, Sentiment, Funda AI, Hormuz APIs", color: secondary, delay: 100 },
+      { text: "鈹? finance-startup-tools     1 skill   Startup analysis", color: secondary, delay: 100 },
+      { text: "鈹? finance-ui-tools          1 skill   Generative UI design system", color: secondary, delay: 100 },
+      { text: "鈹?, color: muted, delay: 60 },
+      { text: "鈹? Targets:  Claude Code", color: muted, delay: 80 },
+      { text: "鈹? Scope:    user", color: muted, delay: 80 },
+      { text: "鈹?, color: muted, delay: 60 },
+      { text: "鈼? Install? Y", color: secondary, delay: 500 },
+      { text: "鈼? Preparing plugins for Claude Code...", color: muted, delay: 400 },
+      { text: "鈹?, color: muted, delay: 60 },
+      { text: "鈼? Adding marketplace", color: muted, delay: 200 },
+      { text: "鈼? Marketplace added", color: green, delay: 300 },
+      { text: "鈹?, color: muted, delay: 60 },
+      { text: "鈼? Installing 5 plugins (21 skills)...", color: muted, delay: 400 },
+      { text: "鈼? Installed finance-market-analysis", color: green, delay: 200 },
+      { text: "鈼? Installed finance-social-readers", color: green, delay: 200 },
+      { text: "鈼? Installed finance-data-providers", color: green, delay: 200 },
+      { text: "鈼? Installed finance-startup-tools", color: green, delay: 200 },
+      { text: "鈼? Installed finance-ui-tools", color: green, delay: 200 },
+      { text: "鈹?, color: muted, delay: 60 },
+      { text: "鈼? Done.  Restart your agent tools to load the plugins.", color: green, delay: 200 },
     ],
   },
 ];
@@ -367,7 +367,7 @@ function computeHeight(
     height += 2.75;
   }
   if (tabs.length > 1) {
-    // Tab list: pt-3 + button height ≈ 2.5rem
+    // Tab list: pt-3 + button height 鈮?2.5rem
     height += 2.5;
   }
   return `${height}rem`;

@@ -1,10 +1,14 @@
 ---
 name: yfinance-data
 description: >
-  Fetch financial and market data using the yfinance Python library.
+  Fetch financial and market data using the yfinance Python library for US/global
+  Yahoo Finance-supported securities, and route A-share/Hong Kong market requests
+  to the ah-market-data skill backed by Hexin iFinD MCP.
   Use this skill whenever the user asks for stock prices, historical data, financial statements,
   options chains, dividends, earnings, analyst recommendations, or any market data.
   Triggers include: any mention of stock price, ticker symbol (AAPL, MSFT, TSLA, etc.),
+  A/H stock requests that need routing to ah-market-data, Chinese tickers such as
+  600519.SH, 000001.SZ, 00700.HK, Chinese company names, A股, 港股, H股,
   "get me the financials", "show earnings", "what's the price of", "download stock data",
   "options chain", "dividend history", "balance sheet", "income statement", "cash flow",
   "analyst targets", "institutional holders", "compare stocks", "screen for stocks",
@@ -12,15 +16,32 @@ description: >
   Always use this skill even if the user only provides a ticker — infer intent from context.
 ---
 
-# yfinance Data Skill
+# Market Data Routing Skill
 
-Fetches financial and market data from Yahoo Finance using the [yfinance](https://github.com/ranaroussi/yfinance) Python library.
+Fetches financial and market data. For A-share and Hong Kong securities, use `ah-market-data` via Hexin iFinD MCP first. For US/global Yahoo Finance-supported securities, use [yfinance](https://github.com/ranaroussi/yfinance).
 
 **Important**: yfinance is not affiliated with Yahoo, Inc. Data is for research and educational purposes.
 
 ---
 
-## Step 1: Ensure yfinance Is Available
+## Step 1: Route A/H Requests First
+
+Before importing or installing yfinance, check whether the request is about A-share or Hong Kong market data.
+
+Use `ah-market-data` when the request includes:
+- A-share codes such as `600519.SH`, `000001.SZ`, `688981.SH`, or plain six-digit Chinese stock codes
+- Hong Kong codes such as `00700.HK`, `0700.HK`, `9988.HK`
+- Chinese security/company names such as 贵州茅台, 平安银行, 腾讯控股
+- A股, 港股, H股, 沪深300, 恒生指数, 北向资金, 南向资金
+- Chinese funds, ETFs, macro series, announcements, or Chinese market news
+
+For A/H requests, call `ah-market-data` and ask it for the needed normalized fields. Do not install yfinance unless the A/H MCP data is unavailable and the user explicitly accepts a fallback with likely coverage gaps.
+
+For all other tickers and Yahoo Finance-supported symbols, continue to Step 2.
+
+---
+
+## Step 2: Ensure yfinance Is Available
 
 **Current environment status:**
 
@@ -39,7 +60,7 @@ If yfinance is already installed, skip the install step and proceed directly.
 
 ---
 
-## Step 2: Identify What the User Needs
+## Step 3: Identify What the User Needs
 
 Match the user's request to one or more data categories below, then use the corresponding code from `references/api_reference.md`.
 
@@ -67,7 +88,7 @@ Match the user's request to one or more data categories below, then use the corr
 
 ---
 
-## Step 3: Write and Execute the Code
+## Step 4: Write and Execute the Code
 
 ### General pattern
 
@@ -99,7 +120,7 @@ ticker = yf.Ticker("AAPL")
 
 ---
 
-## Step 4: Present the Data
+## Step 5: Present the Data
 
 After fetching data, present it clearly:
 
@@ -109,6 +130,8 @@ After fetching data, present it clearly:
 4. **Provide context** — compare to sector averages, historical ranges, or analyst consensus when relevant
 
 If the user seems to want a chart or visualization, combine with an appropriate visualization approach (e.g., generate an HTML chart or describe the trend).
+
+Always state the data source: Hexin iFinD MCP for A/H data, or Yahoo Finance/yfinance for Yahoo-sourced data.
 
 ---
 

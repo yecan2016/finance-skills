@@ -13,18 +13,34 @@ description: >
   "hedging pair", "realized correlation", "rolling correlation",
   or any request about stocks that move in tandem or inversely.
   Also triggers for well-known pairs like AMD/NVDA, GOOGL/AVGO, LITE/COHR.
+  Also supports A-share and Hong Kong correlation work through ah-market-data.
   If only one ticker is provided, infer the user wants correlated peers.
 ---
 
 # Stock Correlation Analysis Skill
 
-Finds and analyzes correlated stocks using historical price data from Yahoo Finance via [yfinance](https://github.com/ranaroussi/yfinance). Routes to specialized sub-skills based on user intent.
+Finds and analyzes correlated stocks. For A-share and Hong Kong securities, use `ah-market-data` via Hexin iFinD MCP for peer discovery and historical prices. For US/global securities, use historical price data from Yahoo Finance via [yfinance](https://github.com/ranaroussi/yfinance). Routes to specialized sub-skills based on user intent.
 
 **Important**: This is for research and educational purposes only. Not financial advice. yfinance is not affiliated with Yahoo, Inc.
 
 ---
 
-## Step 1: Ensure Dependencies Are Available
+## Step 1: Route A/H Requests First
+
+If any target ticker is an A-share or Hong Kong security, use `ah-market-data` before yfinance.
+
+For A/H correlation requests:
+- use stock MCP to normalize symbols and fetch historical close prices
+- use stock MCP sector, industry, concept-board, or index constituents to build peer universes
+- prefer the local benchmark and same-market peers before cross-market peers
+- align trading calendars and drop non-overlapping dates before computing returns
+- state currency and market differences when comparing A-share, Hong Kong, and US-listed securities
+
+If all requested securities are non-A/H Yahoo Finance-supported symbols, continue to Step 2.
+
+---
+
+## Step 2: Ensure Dependencies Are Available
 
 **Current environment status:**
 
@@ -43,7 +59,7 @@ If all dependencies are already installed, skip the install step and proceed dir
 
 ---
 
-## Step 2: Route to the Correct Sub-Skill
+## Step 3: Route to the Correct Sub-Skill
 
 Classify the user's request and jump to the matching sub-skill section below.
 
@@ -331,7 +347,7 @@ def regime_correlation(returns, ticker_a, ticker_b, condition_ticker=None):
 
 ---
 
-## Step 3: Respond to the User
+## Step 4: Respond to the User
 
 After running the appropriate sub-skill, present results clearly:
 
@@ -340,6 +356,7 @@ After running the appropriate sub-skill, present results clearly:
 - The **lookback period** and **data interval** used
 - The **number of observations** (trading days)
 - Any tickers **dropped due to insufficient data**
+- The **data source** and calendar alignment method, especially for A/H or cross-market comparisons
 
 ### Always caveat
 

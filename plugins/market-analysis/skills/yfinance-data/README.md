@@ -1,10 +1,10 @@
 # yfinance-data
 
-Fetch financial and market data using the [yfinance](https://github.com/ranaroussi/yfinance) Python library.
+Fetch financial and market data. A-share and Hong Kong requests route to `ah-market-data` via Hexin iFinD MCP; US/global Yahoo Finance-supported securities use the [yfinance](https://github.com/ranaroussi/yfinance) Python library.
 
 ## What it does
 
-Retrieves a wide range of financial data from Yahoo Finance, including:
+Retrieves a wide range of financial data. For A/H markets, it delegates to the iFinD MCP-backed `ah-market-data` skill. For Yahoo Finance-supported securities, it retrieves:
 
 - **Current prices & quotes** — real-time stock prices, market cap, P/E
 - **Historical OHLCV** — price history with configurable period and interval
@@ -20,6 +20,7 @@ Retrieves a wide range of financial data from Yahoo Finance, including:
 ## Triggers
 
 - Any mention of a ticker symbol (AAPL, MSFT, TSLA, etc.)
+- A/H stock or fund requests that should route to `ah-market-data` (`600519.SH`, `000001.SZ`, `00700.HK`, Chinese company names, A股, 港股)
 - "what's the price of", "get me the financials", "show earnings"
 - "options chain", "dividend history", "balance sheet", "income statement"
 - "analyst targets", "compare stocks", "screen for stocks"

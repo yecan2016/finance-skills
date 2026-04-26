@@ -42,7 +42,7 @@ npx skills add himself65/finance-skills -a <agent-name>
 
 ### Market Analysis (`finance-market-analysis`)
 
-Stock analysis, earnings, estimates, correlations, liquidity, ETFs, options payoff, and trading strategies via yfinance.
+Stock analysis, earnings, estimates, correlations, liquidity, ETFs, options payoff, and trading strategies via yfinance plus A/H routing through Hexin iFinD MCP.
 
 | Skill | Description |
 |---|---|
@@ -55,7 +55,7 @@ Stock analysis, earnings, estimates, correlations, liquidity, ETFs, options payo
 | [sepa-strategy](plugins/market-analysis/skills/sepa-strategy/) | SEPA strategy analysis — Minervini's trend template, VCP patterns, entry points, position sizing |
 | [stock-correlation](plugins/market-analysis/skills/stock-correlation/) | Correlation analysis — sector peers, co-movement, pair-trading candidates |
 | [stock-liquidity](plugins/market-analysis/skills/stock-liquidity/) | Liquidity analysis — spreads, volume profiles, market impact, Amihud ratio |
-| [yfinance-data](plugins/market-analysis/skills/yfinance-data/) | Market data via yfinance — prices, financials, options, dividends, earnings |
+| [yfinance-data](plugins/market-analysis/skills/yfinance-data/) | Market data router — A/H via ah-market-data, US/global via yfinance |
 
 ### Social Readers (`finance-social-readers`)
 
@@ -71,10 +71,13 @@ Read-only social media and research feeds — Twitter/X, Discord, LinkedIn, Tele
 
 ### Data Providers (`finance-data-providers`)
 
+Includes A/H market data via Hexin iFinD MCP in addition to the existing external API providers.
+
 External API data — sentiment via Adanos, comprehensive data via Funda AI, and Hormuz Strait monitoring.
 
 | Skill | Description |
 |---|---|
+| [ah-market-data](plugins/data-providers/skills/ah-market-data/) | A/H stock, fund, macro, and news data via Hexin iFinD MCP servers |
 | [finance-sentiment](plugins/data-providers/skills/finance-sentiment/) | Stock sentiment research via Adanos Finance API — Reddit, X.com, news, Polymarket |
 | [funda-data](plugins/data-providers/skills/funda-data/) | [Funda AI](https://funda.ai) API — real-time quotes, fundamentals, options flow, sentiment, SEC filings, and 60+ endpoints |
 | [hormuz-strait](plugins/data-providers/skills/hormuz-strait/) | Strait of Hormuz monitoring — shipping, oil impact, insurance risk, crisis timeline |

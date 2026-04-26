@@ -1,10 +1,12 @@
 # Stock Liquidity Analysis
 
-Analyze stock liquidity across multiple dimensions using Yahoo Finance data — bid-ask spreads, volume profiles, order book depth estimates, market impact modeling, and turnover ratios.
+Analyze stock liquidity across multiple dimensions. A-share and Hong Kong securities use `ah-market-data` via Hexin iFinD MCP; US/global Yahoo Finance-supported securities use yfinance data. Covers bid-ask spreads, volume profiles, order book depth estimates, market impact modeling, and turnover ratios.
 
 ## Triggers
 
 - "how liquid is AAPL"
+- "贵州茅台流动性怎么样"
+- "00700.HK bid-ask spread"
 - "bid-ask spread for TSLA"
 - "volume analysis for MSFT"
 - "order book depth"

@@ -1,7 +1,9 @@
 ---
 name: etf-premium
 description: >
-  Calculate ETF premium or discount relative to Net Asset Value (NAV) using Yahoo Finance data.
+  Calculate ETF premium or discount relative to Net Asset Value (NAV). Use ah-market-data
+  via Hexin iFinD MCP for Chinese mainland and Hong Kong funds/ETFs, and Yahoo Finance/yfinance
+  for US/global ETFs.
   Use this skill whenever the user asks about an ETF's premium or discount, NAV comparison,
   whether an ETF is trading above or below its fair value, or wants to compare market price vs NAV.
   Triggers: "ETF premium", "ETF discount", "NAV premium", "is SPY trading at a premium",
@@ -15,7 +17,7 @@ description: >
 
 # ETF Premium/Discount Analysis Skill
 
-Calculates the premium or discount of an ETF's market price relative to its Net Asset Value (NAV) using data from Yahoo Finance via [yfinance](https://github.com/ranaroussi/yfinance).
+Calculates the premium or discount of an ETF's market price relative to its Net Asset Value (NAV). For Chinese mainland and Hong Kong funds/ETFs, use `ah-market-data` via Hexin iFinD MCP. For US/global ETFs, use Yahoo Finance data via [yfinance](https://github.com/ranaroussi/yfinance).
 
 **Why this matters:** An ETF's market price can diverge from the value of its underlying holdings (NAV). When you buy at a premium, you're overpaying relative to the assets; at a discount, you're getting a bargain. This divergence is typically small for liquid US equity ETFs but can be significant for bond ETFs, international ETFs, leveraged/inverse products, and crypto ETFs — especially during periods of market stress.
 
@@ -23,7 +25,21 @@ Calculates the premium or discount of an ETF's market price relative to its Net 
 
 ---
 
-## Step 1: Ensure Dependencies Are Available
+## Step 1: Route A/H Fund And ETF Requests First
+
+If the target is a Chinese mainland or Hong Kong fund/ETF, use `ah-market-data` before yfinance. Ask for market price, latest NAV/IOPV if available, premium/discount, turnover, volume, holdings, fund category, fund manager, and timestamp.
+
+For A/H ETFs, state:
+- market price currency
+- NAV currency and date
+- whether NAV is same-day, prior-day, estimated, or intraday IOPV
+- whether the premium/discount may be stale because NAV updates after market close
+
+For non-A/H ETF requests, continue to Step 2.
+
+---
+
+## Step 2: Ensure Dependencies Are Available
 
 **Current environment status:**
 
@@ -42,7 +58,7 @@ If already installed, skip and proceed.
 
 ---
 
-## Step 2: Route to the Correct Sub-Skill
+## Step 3: Route to the Correct Sub-Skill
 
 Classify the user's request and jump to the matching section. If the user asks a general question about an ETF's premium or discount without specifying a particular analysis type, default to **Sub-Skill A** (Single ETF Snapshot).
 

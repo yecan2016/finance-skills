@@ -1,7 +1,9 @@
 ---
 name: estimate-analysis
 description: >
-  Deep-dive into analyst estimates and revision trends for any stock using Yahoo Finance data.
+  Deep-dive into analyst estimates and revision trends for any stock. Use ah-market-data
+  via Hexin iFinD MCP for A-share and Hong Kong securities, and Yahoo Finance/yfinance
+  for US/global securities.
   Use when the user wants to understand analyst estimate direction,
   how EPS or revenue forecasts changed over time, compare estimate distributions,
   or analyze growth projections across periods.
@@ -19,13 +21,23 @@ description: >
 
 # Estimate Analysis Skill
 
-Deep-dives into analyst estimates and revision trends using Yahoo Finance data via [yfinance](https://github.com/ranaroussi/yfinance). Covers EPS and revenue estimate distributions, revision momentum, growth projections, and multi-period comparisons — the full picture of where the street thinks a company is heading.
+Deep-dives into analyst estimates and revision trends. For A-share and Hong Kong securities, use `ah-market-data` via Hexin iFinD MCP. For US/global securities, use Yahoo Finance data via [yfinance](https://github.com/ranaroussi/yfinance). Covers EPS and revenue estimate distributions, revision momentum, growth projections, and multi-period comparisons.
 
 **Important**: Data is for research and educational purposes only. Not financial advice. yfinance is not affiliated with Yahoo, Inc.
 
 ---
 
-## Step 1: Ensure yfinance Is Available
+## Step 1: Route A/H Requests First
+
+If the target is an A-share or Hong Kong company, use `ah-market-data` before yfinance. Ask for analyst consensus, estimate revisions, forecast EPS/revenue/profit, price targets, ratings, historical forecast accuracy, and recent actual financials if available.
+
+If iFinD MCP does not expose a specific revision metric, state the gap and use available forecast snapshots, rating changes, or broker research metadata instead.
+
+For non-A/H requests, continue to Step 2.
+
+---
+
+## Step 2: Ensure yfinance Is Available
 
 **Current environment status:**
 
@@ -44,7 +56,7 @@ If already installed, skip to the next step.
 
 ---
 
-## Step 2: Identify the Ticker and Gather Estimate Data
+## Step 3: Identify the Ticker and Gather Estimate Data
 
 Extract the ticker from the user's request. Fetch all estimate-related data in one script.
 

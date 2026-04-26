@@ -1,6 +1,6 @@
 {
   "name": "finance-market-analysis",
-  "description": "Stock analysis, earnings, estimates, correlations, liquidity, ETFs, options payoff, and trading strategies via yfinance.",
+  "description": "Stock analysis, earnings, estimates, correlations, liquidity, ETFs, options payoff, and trading strategies via yfinance plus A/H routing through Hexin iFinD MCP.",
   "version": "5.2.0",
   "author": {
     "name": "himself65"
@@ -12,6 +12,10 @@
     "finance",
     "stocks",
     "yfinance",
+    "ifind",
+    "mcp",
+    "a-share",
+    "hong-kong",
     "earnings",
     "options",
     "correlation",

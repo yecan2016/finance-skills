@@ -1,6 +1,6 @@
 {
   "name": "finance-data-providers",
-  "description": "External API data — sentiment via Adanos, comprehensive data via Funda AI, and Hormuz Strait monitoring.",
+  "description": "External API and MCP data: A/H market data via Hexin iFinD MCP, sentiment via Adanos, comprehensive data via Funda AI, and Hormuz Strait monitoring.",
   "version": "5.2.0",
   "author": {
     "name": "himself65"
@@ -12,6 +12,10 @@
     "finance",
     "sentiment",
     "api",
+    "mcp",
+    "ifind",
+    "a-share",
+    "hong-kong",
     "funda",
     "geopolitical",
     "oil",
