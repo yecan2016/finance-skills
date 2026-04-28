@@ -8,4 +8,6 @@ __pycache__/
 *.py[cod]
 .env
 .env.*
+# Ignore mcp_config.json everywhere except in skill directories (keep as template)
 mcp_config.json
+!plugins/**/skills/**/mcp_config.json

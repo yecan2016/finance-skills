@@ -25,15 +25,16 @@ resolve an authorization token, initialize a session, then call the needed tool.
 
 ## Step 1: Detect Direct API Credentials
 
-Resolve the iFinD authorization token without printing it. The direct client checks:
+Resolve the iFinD authorization token without printing it. The direct client checks in order:
 
-1. `IFIND_AUTH_TOKEN`
-2. `IFIND_API_TOKEN`
-3. `IFIND_MCP_CONFIG_PATH` pointing to JSON with `auth_token`
-4. `mcp_config.json` in the current working directory or any parent directory, including the repository root
+1. `mcp_config.json` in the skill directory (same directory as this SKILL.md)
+2. `IFIND_AUTH_TOKEN`
+3. `IFIND_API_TOKEN`
+4. `IFIND_MCP_CONFIG_PATH` pointing to JSON with `auth_token`
+5. `mcp_config.json` in the current working directory or any parent directory, including the repository root
 
 ```
-!`python -c "import os,pathlib; cwd=pathlib.Path.cwd(); paths=[pathlib.Path(os.environ['IFIND_MCP_CONFIG_PATH'])] if os.environ.get('IFIND_MCP_CONFIG_PATH') else [cwd/'mcp_config.json', *[p/'mcp_config.json' for p in cwd.parents]]; found=next((str(p) for p in paths if p.exists()), ''); print('IFIND_AUTH_TOKEN_SET' if (os.environ.get('IFIND_AUTH_TOKEN') or os.environ.get('IFIND_API_TOKEN')) else ('IFIND_CONFIG_FOUND:'+found if found else 'IFIND_AUTH_MISSING'))" 2>/dev/null || echo "PYTHON_UNAVAILABLE"`
+!`python -c "import os,pathlib; skill_dir=pathlib.Path(__file__).parent if '__file__' in dir() else pathlib.Path.cwd(); env_paths=[pathlib.Path(os.environ['IFIND_MCP_CONFIG_PATH'])] if os.environ.get('IFIND_MCP_CONFIG_PATH') else []; cwd=pathlib.Path.cwd(); paths=[skill_dir/'mcp_config.json']+env_paths+[cwd/'mcp_config.json', *[p/'mcp_config.json' for p in cwd.parents]]; found=next((str(p) for p in paths if p.exists()), ''); print('IFIND_AUTH_TOKEN_SET' if (os.environ.get('IFIND_AUTH_TOKEN') or os.environ.get('IFIND_API_TOKEN')) else ('IFIND_CONFIG_FOUND:'+found if found else 'IFIND_AUTH_MISSING'))" 2>/dev/null || echo "PYTHON_UNAVAILABLE"`
 ```
 
 Decision tree:
@@ -51,16 +52,16 @@ the JSON-RPC session flow, and the tool catalog discovered from `tools/list`.
 
 Normalize the user's input before calling tools.
 
-| User input | Interpret as | Notes |
-|---|---|---|
-| `600519`, `600519.SH`, `贵州茅台` | A-share stock | Prefer exchange-qualified code in output |
-| `000001`, `000001.SZ`, `平安银行` | A-share stock | Disambiguate stock vs index/fund when needed |
-| `00700`, `0700.HK`, `腾讯控股` | Hong Kong stock | Normalize to `.HK` style when possible |
-| `沪深300`, `CSI 300`, `000300.SH` | China index | Use stock/index-capable queries |
-| `恒生指数`, `HSI` | Hong Kong index | Use stock/index-capable queries |
-| Fund code / ETF code | Fund or ETF | Route to fund server first |
-| Macro indicator | Economic data | Route to EDB server |
-| News / policy / announcement | News data | Route to news server, then stock server if company-specific |
+| User input                        | Interpret as    | Notes                                                       |
+| --------------------------------- | --------------- | ----------------------------------------------------------- |
+| `600519`, `600519.SH`, `贵州茅台` | A-share stock   | Prefer exchange-qualified code in output                    |
+| `000001`, `000001.SZ`, `平安银行` | A-share stock   | Disambiguate stock vs index/fund when needed                |
+| `00700`, `0700.HK`, `腾讯控股`    | Hong Kong stock | Normalize to `.HK` style when possible                      |
+| `沪深300`, `CSI 300`, `000300.SH` | China index     | Use stock/index-capable queries                             |
+| `恒生指数`, `HSI`                 | Hong Kong index | Use stock/index-capable queries                             |
+| Fund code / ETF code              | Fund or ETF     | Route to fund server first                                  |
+| Macro indicator                   | Economic data   | Route to EDB server                                         |
+| News / policy / announcement      | News data       | Route to news server, then stock server if company-specific |
 
 Ask a concise clarification only when the same code/name maps to multiple plausible
 instruments and the requested metric depends on the distinction.
@@ -69,20 +70,20 @@ instruments and the requested metric depends on the distinction.
 
 Match the user request to the lightest direct API call that answers it.
 
-| Request type | Server/tool | Typical fields to request |
-|---|---|---|
-| Current quote / quote snapshot | `stock/get_stock_summary` or `stock/get_stock_performance` | last price, change %, volume, turnover, market cap, timestamp |
-| Historical K-line / price trend | `stock/get_stock_performance` | open, high, low, close, volume, turnover, adjustment mode |
-| Company profile / listing info | `stock/get_stock_info` | code, name, exchange, industry, listing date, main business |
-| Financial statements | `stock/get_stock_financials` | income statement, balance sheet, cash flow, reporting period |
-| Valuation and factors | `stock/get_stock_financials` | PE, PB, PS, dividend yield, ROE, margins, growth |
-| Shareholders / float | `stock/get_stock_shareholders` | float, top holders, institution holdings, shareholder count |
-| Events / corporate actions | `stock/get_stock_events` | event title, date, category, key values |
-| Announcements / filings | `news/search_notice` | announcement title, date, category, relevant snippets |
-| Sector / concept / peers | `stock/search_stocks` or `stock/get_stock_info` | industry, concept boards, constituent or peer list |
-| Fund or ETF data | fund tools | NAV, premium/discount, holdings, performance, manager, fees |
-| Macro data | `edb/search_edb`, then `edb/get_edb_data` | indicator value, frequency, region, release date, history |
-| Market news | `news/search_news` or `news/search_trending_news` | headline/snippet, source, publish time, topic/entity |
+| Request type                    | Server/tool                                                | Typical fields to request                                     |
+| ------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------- |
+| Current quote / quote snapshot  | `stock/get_stock_summary` or `stock/get_stock_performance` | last price, change %, volume, turnover, market cap, timestamp |
+| Historical K-line / price trend | `stock/get_stock_performance`                              | open, high, low, close, volume, turnover, adjustment mode     |
+| Company profile / listing info  | `stock/get_stock_info`                                     | code, name, exchange, industry, listing date, main business   |
+| Financial statements            | `stock/get_stock_financials`                               | income statement, balance sheet, cash flow, reporting period  |
+| Valuation and factors           | `stock/get_stock_financials`                               | PE, PB, PS, dividend yield, ROE, margins, growth              |
+| Shareholders / float            | `stock/get_stock_shareholders`                             | float, top holders, institution holdings, shareholder count   |
+| Events / corporate actions      | `stock/get_stock_events`                                   | event title, date, category, key values                       |
+| Announcements / filings         | `news/search_notice`                                       | announcement title, date, category, relevant snippets         |
+| Sector / concept / peers        | `stock/search_stocks` or `stock/get_stock_info`            | industry, concept boards, constituent or peer list            |
+| Fund or ETF data                | fund tools                                                 | NAV, premium/discount, holdings, performance, manager, fees   |
+| Macro data                      | `edb/search_edb`, then `edb/get_edb_data`                  | indicator value, frequency, region, release date, history     |
+| Market news                     | `news/search_news` or `news/search_trending_news`          | headline/snippet, source, publish time, topic/entity          |
 
 For broad questions like "分析一下贵州茅台":
 
@@ -130,20 +131,20 @@ connectivity, a JSON-RPC error, or no provider data returned.
 
 Use these normalized field concepts when passing data into other analysis:
 
-| Concept | Normalized name |
-|---|---|
-| Security code | `symbol` |
-| Exchange | `exchange` |
-| Security name | `name` |
-| Last price | `last_price` |
-| Change percent | `change_pct` |
-| Volume | `volume` |
-| Turnover amount | `turnover` |
-| Market capitalization | `market_cap` |
-| Report period | `report_period` |
-| Data timestamp | `as_of` |
-| Currency | `currency` |
-| Data source | `source` |
+| Concept               | Normalized name |
+| --------------------- | --------------- |
+| Security code         | `symbol`        |
+| Exchange              | `exchange`      |
+| Security name         | `name`          |
+| Last price            | `last_price`    |
+| Change percent        | `change_pct`    |
+| Volume                | `volume`        |
+| Turnover amount       | `turnover`      |
+| Market capitalization | `market_cap`    |
+| Report period         | `report_period` |
+| Data timestamp        | `as_of`         |
+| Currency              | `currency`      |
+| Data source           | `source`        |
 
 For A/H data, always make units explicit:
 

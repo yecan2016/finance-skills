@@ -210,14 +210,22 @@ def load_auth_token(config_path: Optional[str] = None) -> str:
 
 def _config_candidates(config_path: Optional[str] = None) -> List[Path]:
     candidates: List[Path] = []
+
+    # 1. Skill directory config (highest priority)
+    script_dir = Path(__file__).resolve().parent
+    candidates.append(script_dir / "mcp_config.json")
+
+    # 2. Explicit config path
     explicit = config_path or os.getenv("IFIND_MCP_CONFIG_PATH")
     if explicit:
         candidates.append(Path(os.path.expanduser(os.path.expandvars(explicit))))
 
+    # 3. Current working directory and parents
     cwd = Path.cwd()
     candidates.append(cwd / "mcp_config.json")
     candidates.extend(parent / "mcp_config.json" for parent in cwd.parents)
 
+    # 4. Script directory parents (if different from cwd hierarchy)
     script_path = Path(__file__).resolve()
     candidates.extend(parent / "mcp_config.json" for parent in script_path.parents)
 
